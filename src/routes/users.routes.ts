@@ -4,6 +4,7 @@ import uploadConfig from '../config/upload';
 
 // Temos que importar o CreateUsersService.ts
 import CreateUserService from '../services/CreateUserService';
+import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
@@ -48,7 +49,25 @@ usersRouter.patch(
   ensureAuthenticated,
   upload.single('avatar'),
   async (request, response) => {
-    return response.json({ ok: true });
+    try {
+      const updateUserAvatar = new UpdateUserAvatarService();
+      // Para executar o updateUserAvatar, precisamos do id e do nome do arquivo(avatarFilename);
+      // O id do usuário está no nosso middleware "ensuareAuthenticated.ts"
+      // O filename está no arquivo "upload.ts"
+      // Como o "execute" do arquivo "UpdateUserAvatarService.ts" é uma Promise então precisamos colocar um "await" aqui.
+      const user = await updateUserAvatar.execute({
+        user_id: request.user.id,
+        avatarFilename: request.file.filename,
+      });
+
+      delete user.password;
+
+      return response.json(user);
+    } catch (err) {
+      return response.status(400).json({
+        error: err.message,
+      });
+    }
   },
 );
 // // Vamos exportar a variável appointementesRouter

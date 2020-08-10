@@ -4,15 +4,19 @@ import crypto from 'crypto';
 // Arquivo reservado para armazenar as configurações de upload e imagem
 import multer from 'multer';
 
+// Onde vamos jogar os arquivos que são feitos upload aqui dentro da nossa aplicação
+// "__dirname" Permite ter o caminho inteiro da aplicação até a pasta "config"
+// '..' volta uma pasta(config); '..' volta outra pasta(src); 'tmp' jogando o arquivo dentro da pasta "tmp"
+const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
 
 export default {
+  // Criamos "directory" para saber onde os arquivos ficam
+  directory: tmpFolder,
+
   // Por enquanto nós vamos armazenar as imagens que o usuário fizer o upload aqui na nossa aplicação dentro dentro da estrutura da nossa aplicação.
   // O diskStorage recebe duas propriedades: 1ª destination e 2ª filename
   storage: multer.diskStorage({
-    // Onde vamos jogar os arquivos que são feitos upload aqui dentro da nossa aplicação
-    // "__dirname" Permite ter o caminho inteiro da aplicação até a pasta "config"
-    // '..' volta uma pasta(config); '..' volta outra pasta(src); 'tmp' jogando o arquivo dentro da pasta "tmp"
-    destination: path.resolve(__dirname, '..', '..', 'tmp'),
+    destination: tmpFolder,
     // Qual nome o arquivo receberá
     // Poderia ser também: filename: (request, file, callback) => {...}
     filename(request, file, callback) {
