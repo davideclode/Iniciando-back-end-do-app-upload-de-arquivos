@@ -8,7 +8,7 @@ class AppError {
 
   // Criamos agora um "constructor" que vai receber "message" e o "statusCode"
   // O "400" é um tipo de erro padrão do HTTP. Que no caso será um número
-  constructor(message: string, statusCode: 400) {
+  constructor(message: string, statusCode = 400) {
     this.message = message;
     this.statusCode = statusCode;
   }
