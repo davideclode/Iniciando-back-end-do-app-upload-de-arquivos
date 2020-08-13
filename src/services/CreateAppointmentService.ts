@@ -4,6 +4,8 @@
 import { startOfHour } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
 
+import AppError from '../errors/AppError';
+
 import Appointment from '../models/Appointment';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
@@ -32,7 +34,7 @@ class CreateAppointmentService {
     // Quando "findAppointmentInSameDate" receber os agendamentos(appointments) que está dentro de " appointmentsRepository" pela data, então é a vez de fazer a verificação.
     if (findAppointmentInSameDate) {
       // Como o nosso "service" não tem acesso ao "request" e nem o "response", o que podemos fazer no servive quando ele chegar num erro é realizar/dar um "throw" dentro de "Error".
-      throw Error('Sorry🙁😢, this appointment is already booked!!!');
+      throw new AppError('Sorry🙁😢, this appointment is already booked!!!');
     }
 
     //  Depois de checar todas as condiçoes para ver se a data bateu ou não, passamos o "provider, date" para a nova variável "appointment". Como alteramos o "create" do arquivo "AppointmentsRepository.ts" agora não precisamos enviar os parâmetros "provider" e "date" separados por vírgula e sim como um objeto.

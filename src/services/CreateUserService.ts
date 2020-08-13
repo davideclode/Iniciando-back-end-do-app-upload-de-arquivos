@@ -2,6 +2,7 @@
 import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 
+import AppError from '../errors/AppError';
 import User from '../models/User';
 
 // Vamos criar a interface aqui
@@ -24,7 +25,7 @@ class CreateUserService {
       where: { email }, // Poderia ser where: {email: email}
     });
     if (checkUserExists) {
-      throw new Error('Email address already used!!!');
+      throw new AppError('Email address already used!!!');
     }
 
     // Criamos a variável que vai recer o password criptografado

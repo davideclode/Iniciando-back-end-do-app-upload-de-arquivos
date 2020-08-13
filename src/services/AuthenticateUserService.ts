@@ -3,6 +3,8 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import authConfig from '../config/auth';
 
+import AppError from '../errors/AppError';
+
 import User from '../models/User';
 
 // Como vamos precisar de passar email e senha dentro do execute, vamos criar uma interface
@@ -28,14 +30,14 @@ class AuthenticateUserService {
     });
 
     if (!user) {
-      throw new Error('Incorrect email/password combination');
+      throw new AppError('Incorrect email/password combination.', 401);
     }
     // user.password - é a senha criptografada que está salvo no nosso banco de dados
     // password - senha não criptografada que está dentro do execute emé a senha que o usuário tentou fazer login.
     // O "compare" que importamos lá acima, permite comparar se a senha não criptografada bate com a senha não criptografada.
     const passwordMatched = await compare(password, user.password);
     if (!passwordMatched) {
-      throw new Error('Incorrect email/password combination');
+      throw new AppError('Incorrect email/password combination.', 401);
     }
 
     const { secret, expiresIn } = authConfig.jwt;

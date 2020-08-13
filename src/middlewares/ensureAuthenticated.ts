@@ -3,6 +3,8 @@ import { verify } from 'jsonwebtoken';
 
 import authConfig from '../config/auth';
 
+import AppError from '../errors/AppError';
+
 interface TokenPayload {
   // Aqui vou informar qual que é o retorno que o meu token tem
   iat: number;
@@ -23,7 +25,7 @@ export default function ensureAuthenticated(
   const authHeader = request.headers.authorization; // authorization é o nome do header
 
   if (!authHeader) {
-    throw new Error('JWT token is missing!!!');
+    throw new AppError('JWT token is missing!!!', 401);
   }
 
   // Se o token existir(Lembrando que o token está no formato "Bearer afofjwofhowffweyf8"), então vamos dividir o token em duas partes: Bearer e o afofjwofhowffweyf8. Vamos utilizar a desestruturação. Como estamos interessado só na segunda posição(o "token").
@@ -45,6 +47,6 @@ export default function ensureAuthenticated(
 
     return next();
   } catch (err) {
-    throw new Error('Invalid JWT token');
+    throw new AppError('Invalid JWT token.', 401);
   }
 }
