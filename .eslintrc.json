@@ -27,6 +27,9 @@
       "no-console": "off", /* Eu que adicionei isso */
       "class-methods-use-this": "off", /* Linha acrescentada. Desabilitamos o "this" */
       "camelcase": 0,
+      "@typescript-eslint/no-unused-vars": ["error", {
+        "argsIgnorePattern": "_"
+      }],
       "import/extensions": [
         "error",
         "ignorePackages",

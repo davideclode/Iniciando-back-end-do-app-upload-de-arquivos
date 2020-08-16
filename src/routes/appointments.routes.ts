@@ -32,29 +32,25 @@ appointmentsRouter.get('/', async (request, response) => {
 // // Essa parte foi adicionada depois de "routes.use('/appointments', appointmentsRouter);" do arquivo index.ts
 // // Agora, se formos criar uma rota para criar um agendamento(uma rota do tipo post), não precisamos colocar "/appointments". Podemos escrever simplesmente "/". Isto porque utilizamos "routes.use"
 appointmentsRouter.post('/', async (request, response) => {
-  try {
-    // Eu vou pegar de dentro de "request.body", os dados que o usuário vai precisar para fazer o agendamento. Quais dados? R.: provider=cabeleireiro e a date=horário
-    const { provider_id, date } = request.body;
+  // Eu vou pegar de dentro de "request.body", os dados que o usuário vai precisar para fazer o agendamento. Quais dados? R.: provider=cabeleireiro e a date=horário
+  const { provider_id, date } = request.body;
 
-    // Convertendo a data e passando ela para parsedDate
-    const parsedDate = parseISO(date);
+  // Convertendo a data e passando ela para parsedDate
+  const parsedDate = parseISO(date);
 
-    // Criamos o "createAppointment" para poder passsar o "appointmentsRepository" que é o parâmetro do "constructor" lá do arquivo "CreateAppointmentService.ts".
-    // Tudo que diz respeito a regra/lógica de negócio colocamos o "service"(no arquivo CreateAppointmenteService). E para acessessá-la, além de fazer a importação do arquivo, precisamos instanciar "CreateAppointmentService".
-    // O "CreateAppointmentService()"" já tem o "ppointmentsRepository"
-    const createAppointment = new CreateAppointmentService();
+  // Criamos o "createAppointment" para poder passsar o "appointmentsRepository" que é o parâmetro do "constructor" lá do arquivo "CreateAppointmentService.ts".
+  // Tudo que diz respeito a regra/lógica de negócio colocamos o "service"(no arquivo CreateAppointmenteService). E para acessessá-la, além de fazer a importação do arquivo, precisamos instanciar "CreateAppointmentService".
+  // O "CreateAppointmentService()"" já tem o "ppointmentsRepository"
+  const createAppointment = new CreateAppointmentService();
 
-    // appointment é o agendamento que estamos querendo criar. Aqui, estamos executando o nosso "service", ou seja, o nosso  "const appointment = this.appointmentsRepository.create({provider, date: appointmentDate,  });" do arquivo "CreateAppointmentService".
-    const appointment = await createAppointment.execute({
-      provider_id,
-      date: parsedDate,
-    });
+  // appointment é o agendamento que estamos querendo criar. Aqui, estamos executando o nosso "service", ou seja, o nosso  "const appointment = this.appointmentsRepository.create({provider, date: appointmentDate,  });" do arquivo "CreateAppointmentService".
+  const appointment = await createAppointment.execute({
+    provider_id,
+    date: parsedDate,
+  });
 
-    // Retornando o agora o nosso agendamento "appointment" criado
-    return response.json(appointment);
-  } catch (err) {
-    return response.status(400).json({ error: err.message });
-  }
+  // Retornando o agora o nosso agendamento "appointment" criado
+  return response.json(appointment);
 });
 
 // // Vamos exportar a variável appointementesRouter
